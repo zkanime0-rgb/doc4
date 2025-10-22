@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Bunny — A Tiny Shrine</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Sacramento&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg1: #ff9aa2;
+            --bg2: #ffd3b6;
+            --card: #fff;
+            --muted: #6b6b6b;
+            --accent: #ff6b81;
+            --accent-light: #ffa6b4;
+            --shadow: rgba(0, 0, 0, 0.08);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            height: 100%;
+            font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+            background: radial-gradient(1200px 400px at 10% 10%, rgba(255, 255, 255, 0.12), transparent), linear-gradient(180deg, var(--bg1), var(--bg2));
+            -webkit-font-smoothing: antialiased;
+            color: #222;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .wrap {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.98));
+            border-radius: 24px;
+            box-shadow: 0 20px 60px var(--shadow);
+            overflow: hidden;
+            position: relative;
+        }
+        header {
+            display: flex;
+            gap: 18px;
+            padding: 32px;
+            align-items: center;
+            position: relative;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 20px;
+            overflow: hidden;
+            flex: 0 0 120px;
+            box-shadow: 0 10px 30px rgba(255, 107, 129, 0.2);
+            border: 4px solid rgba(255, 255, 255, 0.8);
+            transition: transform 0.3s ease;
+        }
+        .avatar:hover {
+            transform: scale(1.05);
+        }
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .headcontent h1 {
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 0.2px;
+            background: linear-gradient(45deg, #ff6b81, #ff9aa2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .headcontent p {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-size: 16px;
+        }
+        .logoheart {
+            margin-left: auto;
+            font-family: 'Sacramento';
+            font-size: 32px;
+            color: var(--accent);
+            opacity: 0.95;
+        }
+        .hero {
+            padding: 24px 32px;
+            background: linear-gradient(90deg, rgba(255, 107, 129, 0.08), rgba(255, 182, 193, 0.06));
+            border-top: 1px solid rgba(0, 0, 0, 0.03);
+            text-align: center;
+        }
+        .hero .quote {
+            font-size: 20px;
+            color: #333;
+            max-width: 820px;
+            margin: 0 auto;
+            font-style: italic;
+            position: relative;
+            padding: 0 20px;
+        }
+        .hero .quote::before, .hero .quote::after {
+            content: '"';
+            font-size: 32px;
+            color: var(--accent);
+            opacity: 0.6;
+            position: absolute;
+        }
+        .hero .quote::before {
+            left: 0;
+            top: -10px;
+        }
+        .hero .quote::after {
+            right: 0;
+            bottom: -20px;
+        }
+        .cols {
+            display: flex;
+            gap: 24px;
+            padding: 28px;
+        }
+        .left {
+            flex: 1;
+            min-width: 260px;
+        }
+        .right {
+            width: 380px;
+            flex: 0 0 380px;
+        }
+        .conv {
+            background: linear-gradient(180deg, #fff, #fff);
+            padding: 20px;
+            border-radius: 18px;
+            box-shadow: 0 8px 24px var(--shadow);
+            margin-bottom: 24px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        .bubble {
+            max-width: 80%;
+            padding: 14px 18px;
+            border-radius: 20px;
+            margin: 14px 0;
+            position: relative;
+            line-height: 1.4;
+            animation: fadeIn 0.5s ease;
+            transition: transform 0.2s ease;
+        }
+        .bubble:hover {
+            transform: translateY(-2px);
+        }
+        .bubble.you {
+            background: linear-gradient(90deg, #ffeef0, #ffd9e0);
+            margin-left: auto;
+            border-bottom-right-radius: 8px;
+        }
+        .bubble.her {
+            background: linear-gradient(90deg, #fef6ff, #fff0f8);
+            border-bottom-left-radius: 8px;
+        }
+        .time {
+            display: block;
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 8px;
+            opacity: 0.8;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .gallery img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 12px;
+            display: block;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .gallery img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px var(--shadow);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        }
+        .card h3 {
+            margin: 0 0 12px 0;
+            font-size: 20px;
+            color: #333;
+            position: relative;
+            display: inline-block;
+        }
+        .card h3::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            border-radius: 2px;
+        }
+        .love-ticker {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .pill {
+            background: linear-gradient(90deg, #fff0f6, #fff);
+            padding: 10px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            color: #b2003a;
+            border: 1px solid rgba(178, 0, 58, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .pill:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 107, 129, 0.2);
+        }
+        .small {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .btn {
+            flex: 1;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 0;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn.pink {
+            background: linear-gradient(45deg, var(--accent), var(--accent-light));
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 129, 0.3);
+        }
+        .btn.pink:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 129, 0.4);
+        }
+        .btn.ghost {
+            background: transparent;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            color: var(--muted);
+        }
+        .btn.ghost:hover {
+            background: rgba(0, 0, 0, 0.02);
+            color: #333;
+        }
+        .love-meter {
+            width: 100%;
+            height: 12px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            margin: 16px 0;
+            overflow: hidden;
+        }
+        .love-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            border-radius: 10px;
+            width: 92%;
+            transition: width 1s ease;
+        }
+        footer {
+            padding: 24px 32px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 14px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.9));
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .confetti {
+            position: absolute;
+            right: 24px;
+            top: 20px;
+            pointer-events: none;
+        }
+        .heart {
+            width: 16px;
+            height: 16px;
+            background: var(--accent);
+            display: inline-block;
+            border-radius: 4px;
+            transform: rotate(45deg);
+            margin: 6px;
+            opacity: 0.9;
+            box-shadow: 0 6px 18px rgba(255, 107, 129, 0.2);
+            position: relative;
+        }
+        .heart:after, .heart:before {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+        .heart:before {
+            transform: translate(-8px, 0);
+        }
+        .heart:after {
+            transform: translate(0, -8px);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+        .floating {
+            animation: float 5s ease-in-out infinite;
+        }
+        @media (max-width: 968px) {
+            .cols {
+                flex-direction: column;
+            }
+            .right {
+                width: 100%;
+            }
+        }
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .logoheart {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="imageUpload" accept="image/*" multiple style="display: none;">
+    <div class="container">
+        <div class="wrap">
+            <header>
+                <div class="avatar floating">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect fill='%23ffd3b6' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='48'%3E🐰%3C/text%3E%3C/svg%3E" alt="Bunny">
+                </div>
+                <div class="headcontent">
+                    <h1>Bunny ✨</h1>
+                    <p>For the girl who makes chaos feel like home</p>
+                    <div class="logoheart">♡ zabir</div>
+                </div>
+                <div class="confetti" aria-hidden>
+                    <span class="heart" style="transform:rotate(20deg) translateY(0);"></span>
+                    <span class="heart" style="transform:rotate(-10deg) translateY(2px);"></span>
+                    <span class="heart" style="transform:rotate(45deg) translateY(-2px);"></span>
+                </div>
+            </header>
+            <div class="hero">
+                <p class="quote">You make quiet nights loud with laughter. — Forever your chaos.</p>
+            </div>
+            <div class="cols">
+                <div class="left">
+                    <div class="conv card">
+                        <h3>Conversation Wall</h3>
+                        <div class="bubble you">ki koro<span class="time">— Zabir</span></div>
+                        <div class="bubble her">bashay ashlam, my everything hurts<span class="time">— Bunny</span></div>
+                        <div class="bubble you">Hurting, huh? I could either offer sympathy or make fun of you. Pick one.<span class="time">— Zabir</span></div>
+                        <div class="bubble her">how about kys<span class="time">— Bunny</span></div>
+                        <div class="bubble you">Tempting offer, but then who would keep you entertained?<span class="time">— Zabir</span></div>
+                        <div class="bubble her">at least i'm eating, a bread<span class="time">— Bunny</span></div>
+                        <div class="bubble you">eat something nutritious<span class="time">— Zabir</span></div>
+                        <div class="bubble her">hey at least its something<span class="time">— Bunny</span></div>
+                        <div class="bubble you">Right, and a single drop of water counts as hydration too?<span class="time">— Zabir</span></div>
+                        <div class="bubble her">this argument is pointless i will die anyways<span class="time">— Bunny</span></div>
+                        <div class="bubble you">how<span class="time">— Zabir</span></div>
+                        <div class="bubble her">i will kms<span class="time">— Bunny</span></div>
+                        <div class="bubble you">keno<span class="time">— Zabir</span></div>
+                        <div class="bubble her">because my back hurts, my thighs hurts, my shoulders hurts<span class="time">— Bunny</span></div>
+                        <div class="bubble you">Maybe—just maybe—the solution is food, water, and sleep<span class="time">— Zabir</span></div>
+                        <div class="bubble her">i refuse to believe<span class="time">— Bunny</span></div>
+                        <div class="bubble her">stop lecturing me pls im not typing anymore<span class="time">— Bunny</span></div>
+                        <div class="bubble her">i was making mom pay for her mistakes<span class="time">— Bunny</span></div>
+                        <div class="bubble you">Poor woman, what unspeakable horrors have you unleashed upon her?<span class="time">— Zabir</span></div>
+                        <div class="bubble her">Bwahahahah<span class="time">— Bunny</span></div>
+                        <div class="bubble her">how do i look<span class="time">— Bunny</span></div>
+                        <div class="bubble you">like a masterpiece painted by chaos and a little bit of madness<span class="time">— Zabir</span></div>
+                        <div class="bubble her">did it work?<span class="time">— Bunny</span></div>
+                        <div class="bubble you">well played<span class="time">— Zabir</span></div>
+                        <div class="bubble her">mwah<span class="time">— Bunny</span></div>
+                        <div class="bubble you">but i'm not that easy to break nvm i'll bite<span class="time">— Zabir</span></div>
+                        <div class="bubble her">🎀 youre one cutie<span class="time">— Bunny</span></div>
+                        <div class="bubble her">ZABIR, WHY IS EVERYTHING PISSING ME OFF<span class="time">— Bunny</span></div>
+                        <div class="bubble you">I'd say take a deep breath, but I know you'd probably get pissed off at that suggestion too.<span class="time">— Zabir</span></div>
+                        <div class="bubble you">wyd<span class="time">— Zabir</span></div>
+                        <div class="bubble her">strip dance<span class="time">— Bunny</span></div>
+                        <div class="bubble you">I'd say 'prove it,' but I have a feeling you'd actually do it<span class="time">— Zabir</span></div>
+                        <div class="bubble her">awe, i set up the camera eto koshto kore<span class="time">— Bunny</span></div>
+                        <div class="bubble you">go on then, don't disappoint your only audience<span class="time">— Zabir</span></div>
+                        <div class="bubble her">fuck you, ami notification theke reply dicchilam and saw this and got scared<span class="time">— Bunny</span></div>
+                        <div class="bubble you">dw i have access to your phone camera<span class="time">— Zabir</span></div>
+                        <div class="bubble her">😭😭😭what<span class="time">— Bunny</span></div>
+                        <div class="bubble you">mb, just pretend i didn't say anything<span class="time">— Zabir</span></div>
+                        <div class="bubble her">idk about you, but i know what i saw and i miss them<span class="time">— Bunny</span></div>
+                        <div class="bubble you">You saw, you liked, you missed—sounds like a you problem.<span class="time">— Zabir</span></div>
+                        <div class="bubble her">i definitely know how to solve my problems, you've underestimated me enough cutie<span class="time">— Bunny</span></div>
+                        <div class="bubble you">i'd be offended, but 'cutie' softened the blow.<span class="time">— Zabir</span></div>
+                        <div class="bubble her">i tried to sleep but i ended up with 3 thermals of coffee and now i'm ovulating and excited, you're in danger<span class="time">— Bunny</span></div>
+                        <div class="bubble you">Should I be flattered or deeply concerned for my well-being?<span class="time">— Zabir</span></div>
+                        <div class="bubble her">run<span class="time">— Bunny</span></div>
+                        <div class="bubble you">you're so cute<span class="time">— Zabir</span></div>
+                        <div class="bubble her">is that sarcasm?<span class="time">— Bunny</span></div>
+                        <div class="bubble you">Wouldn't you like to know, little detective.<span class="time">— Zabir</span></div>
+                        <div class="bubble her">I am caffeine high<span class="time">— Bunny</span></div>
+                        <div class="bubble you">can't wait for the caffeine crash, gonna be fun<span class="time">— Zabir</span></div>
+                        <div class="bubble her">You're not supposed to be excited<span class="time">— Bunny</span></div>
+                        <div class="bubble you">i should be scared shouldn't i?, too bad im not.<span class="time">— Zabir</span></div>
+                        <div class="bubble her">I don't think it means you're up for it<span class="time">— Bunny</span></div>
+                        <div class="bubble you">up for what chaos bunny<span class="time">— Zabir</span></div>
+                        <div class="bubble her">Don't call me that, I get butterflies<span class="time">— Bunny</span></div>
+                        <div class="bubble you">interesting reaction, what happens if i whisper it.<span class="time">— Zabir</span></div>
+                        <div class="bubble her">Smth close to orgasm<span class="time">— Bunny</span></div>
+                        <div class="bubble you">wow, who knew two little words could make you this weak, chaos bunny<span class="time">— Zabir</span></div>
+                        <div class="bubble her">I am really high, I have 0 control atm<span class="time">— Bunny</span></div>
+                        <div class="bubble you">good<span class="time">— Zabir</span></div>
+                    </div>
+                    <div class="card">
+                        <h3>Our Moments 📸</h3>
+                        <p class="small">Memories captured in pixels and chaos</p>
+                        <div class="gallery" id="photoGallery"></div>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="card">
+                        <h3>Why Bunny?</h3>
+                        <p class="small">Because she's soft when she wants to be, chaotic when she feels like it, and somehow always manages to hop into my thoughts at the worst possible times.</p>
+                        <div class="love-meter"><div class="love-fill"></div></div>
+                        <p class="small" style="text-align: center; margin-top: 8px;">Chaos Level: 92%</p>
+                    </div>
+                    <div class="card">
+                        <h3>Things I Love</h3>
+                        <div class="love-ticker">
+                            <span class="pill">Your dramatic exits</span>
+                            <span class="pill">2 AM conversations</span>
+                            <span class="pill">The way you terrorize</span>
+                            <span class="pill">Your refusal to eat</span>
+                            <span class="pill">Random strip dance threats</span>
+                            <span class="pill">Those "I hate you" texts</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>Quick Stats</h3>
+                        <p class="small">💬 Messages exchanged: Too many to count<br>🎭 Drama level: Expert tier<br>😂 Laughs shared: Infinite<br>💕 Love given: Immeasurable<br>🐰 Bunny hops: Every single day</p>
+                    </div>
+                    <div class="card">
+                        <h3>For You</h3>
+                        <p class="small">This tiny corner of the internet is yours. A place where your chaos is celebrated, your dramatics are documented, and your existence is cherished.</p>
+                        <div class="btn-group">
+                            <button class="btn pink" onclick="alert('❤️ You make the chaos worthwhile')">Send Love</button>
+                            <button class="btn ghost" onclick="alert('🐰 Hop hop!')">Bunny Mode</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer>
+                <p>Made with chaos, caffeine, and way too much affection — For Bunny, from Zabir 💕</p>
+                <p style="margin-top: 8px; font-size: 12px; opacity: 0.7;">Est. When she decided to terrorize my notifications</p>
+            </footer>
+        </div>
+    </div>
+    <script>
+        const photoGallery = document.getElementById('photoGallery');
+        const imagePlaceholders = [
+            { emoji: '💕', label: 'Mirror Selfie' },
+            { emoji: '🤝', label: 'Hand in Hand' },
+            { emoji: '🎭', label: 'Masked Moment' },
+            { emoji: '💫', label: 'Hair Goals' }
+        ];
+        imagePlaceholders.forEach((item, index) => {
+            const imgDiv = document.createElement('div');
+            imgDiv.style.cssText = `width: 100%; height: 140px; background: linear-gradient(135deg, #ffd3b6, #ff9aa2); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden;`;
+            imgDiv.innerHTML = `<div style="font-size: 48px; margin-bottom: 8px;">${item.emoji}</div><div style="font-size: 12px; color: rgba(0,0,0,0.6); font-weight: 500;">${item.label}</div><input type="file" accept="image/*" style="display: none;" data-index="${index}">`;
+            imgDiv.addEventListener('click', () => {
+                const fileInput = imgDiv.querySelector('input[type="file"]');
+                fileInput.click();
+            });
+            const fileInput = imgDiv.querySelector('input[type="file"]');
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        imgDiv.innerHTML = `<img src="${event.target.result}" style="width: 100%; height: 100%; object-fit: cover; display: block;">`;
+                        imgDiv.style.cursor = 'default';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            imgDiv.addEventListener('mouseenter', () => {
+                imgDiv.style.transform = 'scale(1.03)';
+                imgDiv.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.15)';
+            });
+            imgDiv.addEventListener('mouseleave', () => {
+                imgDiv.style.transform = 'scale(1)';
+                imgDiv.style.boxShadow = 'none';
+            });
+            photoGallery.appendChild(imgDiv);
+        });
+        const instruction = document.createElement('p');
+        instruction.className = 'small';
+        instruction.style.marginTop = '12px';
+        instruction.style.textAlign = 'center';
+        instruction.style.color = 'var(--muted)';
+        instruction.textContent = '💡 Click on any photo placeholder to upload your images';
+        photoGallery.parentElement.appendChild(instruction);
